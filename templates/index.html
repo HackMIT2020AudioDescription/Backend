@@ -1,0 +1,37 @@
+<!doctype html>
+
+<title>RTADVI</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+<main>
+
+	<section id="video">
+		<div>
+			<label for="feed">Scene</label>
+			<img id="feed" src="{{ url_for('video_feed') }}">
+		</div>
+	</section>
+
+	<section id="description">
+		<div>
+			<label for="scene">Description</label>
+			<textarea id="scene" cols="50"></textarea>
+		</div>
+	</section>
+
+</main>
+
+<figure>
+	<figcaption>Audio Description</figcaption>
+	<audio controls src="" style="width: 100%;"></audio>
+</figure>
+
+
+<script type="text/javascript">
+	const source = new EventSource("{{ url_for('text_feed') }}")
+	const textarea = document.getElementsByTagName('textarea')[0]
+	source.onmessage = event => {
+		data = JSON.parse(event.data.replace(/\'/g, "\""))
+		textarea.value = JSON.stringify(data, undefined, 2)
+	}
+</script>
